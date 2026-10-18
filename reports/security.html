@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merjane Refacto — Security</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>Merjane Refacto — Security</h1>
+      <div class="report-meta">
+        <span>Generated <strong>2026-10-18T10:30:00.000Z</strong></span>
+        <span>Developer model <strong>Claude Opus 4.8</strong></span>
+        <span>Reviewer model <strong>Grok 4.7</strong></span>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Security findings</h2>
+      <p class="muted">Subset of issues with <code>security: true</code>. Reviewed on Grok 4.7 (≠ Developer Claude Opus 4.8).</p>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sev</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Evidence</th>
+            <th>Remediation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ISSUE-012</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>Unauthenticated processOrder on all interfaces</td>
+            <td><code>main.ts:15</code> · route</td>
+            <td>No auth; listen <code>0.0.0.0</code>; anyone who reaches the port can mutate stock and trigger notifications.</td>
+            <td>Gate 1: full auth <em>or</em> defer + bind loopback in non-prod / document exposure.</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-013</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>pnpm audit critical / high advisories</td>
+            <td><code>package.json</code></td>
+            <td>~8 critical / ~56 high. Runtime: convict, fastify 4.25.2, drizzle-orm; unused lodash; vitest UI critical if exposed.</td>
+            <td>Upgrade direct runtime; remove unused lodash; never expose vitest UI; add audit CI.</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-017</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>Full order logged to stdout</td>
+            <td><code>my-controller.ts:36</code></td>
+            <td><code>console.log(order)</code> dumps product names, stock, dates.</td>
+            <td>Remove dump; structured orderId via Fastify logger; wire LOG_LEVEL.</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-018</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>Shell interpolation of DB path in tests</td>
+            <td><code>test-utils/*</code></td>
+            <td><code>exec</code> with <code>--url=${...}</code> allows metacharacters from env.</td>
+            <td>Use <code>execFile</code> or non-shell drizzle/better-sqlite3 push.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted">Related integrity bugs (security: false in catalog, attacker-amplified if ISSUE-012 stays open): ISSUE-001 crash on missing order, ISSUE-002 non-atomic stock.</p>
+    </section>
+
+    <section class="section">
+      <h2>Dependency / audit notes</h2>
+      <ul>
+        <li>Baseline command: <code>pnpm audit</code> → ~119 findings (8 critical, 56 high, 44 moderate, 11 low).</li>
+        <li>Order queries bind values via Drizzle <code>eq()</code> — no SQL injection filed on this route.</li>
+        <li>Recommended Gate 1 scope: upgrade <strong>direct</strong> runtime (fastify, convict, drizzle-orm) + drop unused lodash; defer transitive xo/webpack noise unless CI audit job is approved.</li>
+        <li>Do not expose <code>vitest --ui</code> / Vitest API server in shared environments.</li>
+      </ul>
+    </section>
+  </article>
+</body>
+</html>

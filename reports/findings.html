@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merjane Refacto — Findings</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>Merjane Refacto — Findings</h1>
+      <div class="report-meta">
+        <span>Generated <strong>2026-10-18T10:30:00.000Z</strong></span>
+        <span>Developer model <strong>Claude Opus 4.8</strong></span>
+        <span>Reviewer model <strong>Grok 4.7</strong></span>
+      </div>
+    </header>
+
+    <div class="gate-banner">
+      <strong>Gate 1 — Human approval required.</strong>
+      Do not edit product source until the human approves (or adjusts) this catalog and the proposed plan below.
+      Reply with <code>approve Gate 1</code> (optionally listing rejects / re-priorities).
+    </div>
+
+    <section class="section">
+      <h2>Baseline (as-found)</h2>
+      <ul>
+        <li><strong>HEAD:</strong> <code>e992c1200e84821056c713cf2b57176f05206f1f</code></li>
+        <li><strong>PM / stack:</strong> pnpm@9.1.4 · Fastify + Awilix + Drizzle/SQLite + Vitest + xo · API only (no frontend)</li>
+        <li><strong>Tests:</strong> <code>pnpm test</code> PASS — 1 unit + 1 integration skeleton (thin business coverage)</li>
+        <li><strong>Lint:</strong> <code>pnpm lint</code> FAIL — 2 unnecessary type assertions in integration spec</li>
+        <li><strong>Types:</strong> no <code>typecheck</code> script; <code>tsc</code> polluted by Vitest <code>html/</code>; src: unused <code>ids</code></li>
+        <li><strong>Audit:</strong> ~119 advisories (8 critical / 56 high)</li>
+        <li><strong>CI:</strong> none</li>
+        <li><strong>Protected (do not change):</strong> <code>notifications.port.ts</code>, <code>notification.service.ts</code></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Issue catalog</h2>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sev</th>
+            <th>Category</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ISSUE-001</code></td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td>bug</td>
+            <td>Missing order crashes processOrder with a 500</td>
+            <td><code>my-controller.ts:24-38</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-002</code></td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td>bug</td>
+            <td>Non-atomic / concurrent stock updates can oversell</td>
+            <td><code>my-controller.ts</code> · <code>product.service.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-003</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>Expirable OOS treated as expired (wrong notification)</td>
+            <td><code>my-controller.ts</code> · <code>product.service.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-004</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>Seasonal rules disagree with cahier; can wipe stock</td>
+            <td><code>my-controller.ts</code> · <code>product.service.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-005</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>NORMAL OOS with leadTime ≤ 0 notifies nobody</td>
+            <td><code>my-controller.ts:43-52</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-006</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>Unknown product type silently skipped (still 200)</td>
+            <td><code>my-controller.ts</code> · <code>schema.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-007</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>Re-processing same order decrements stock again</td>
+            <td><code>schema.ts</code> · <code>my-controller.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-008</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>Updates rewrite full product row (including id)</td>
+            <td><code>controller</code> · <code>product.service.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-009</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>bug</td>
+            <td>Null season/expiry dates coerced via <code>!</code> / epoch</td>
+            <td><code>controller</code> · <code>product.service.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-010</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>test</td>
+            <td>Unit test WHERE is a tautology (shadowed id)</td>
+            <td><code>product.service.spec.ts:54-56</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-011</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>test</td>
+            <td>Integration test never asserts stock or notifications</td>
+            <td><code>my-controller.integration.spec.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-012</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>security</td>
+            <td>Unauthenticated processOrder on 0.0.0.0</td>
+            <td><code>main.ts:15</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-013</code></td>
+            <td><span class="badge badge-p1">P1</span></td>
+            <td>deps</td>
+            <td>pnpm audit: critical / high advisories</td>
+            <td><code>package.json</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-014</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>solid</td>
+            <td>Sell rules in controller; duplicated in ProductService</td>
+            <td><code>my-controller.ts</code> · <code>product.service.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-015</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>architecture</td>
+            <td>Invariants / FKs not enforced (foreign_keys off)</td>
+            <td><code>schema.ts</code> · <code>drizzle.plugin.ts</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-016</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>tooling</td>
+            <td>No typecheck script / CI; tsc polluted by html/</td>
+            <td><code>package.json</code> · <code>tsconfig.json</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-017</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>security</td>
+            <td>console.log dumps full order graph</td>
+            <td><code>my-controller.ts:36</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-018</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>security</td>
+            <td>Test DB path interpolated into shell exec</td>
+            <td><code>test-utils/*</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-019</code></td>
+            <td><span class="badge badge-p2">P2</span></td>
+            <td>deps</td>
+            <td>Several direct dependencies unused</td>
+            <td><code>package.json</code></td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-020</code></td>
+            <td><span class="badge badge-p3">P3</span></td>
+            <td>lint</td>
+            <td>Dead ids + unnecessary assertions break lint/tsc</td>
+            <td><code>my-controller.ts</code> · integration spec</td>
+            <td>open</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-021</code></td>
+            <td><span class="badge badge-p3">P3</span></td>
+            <td>architecture</td>
+            <td>Opaque names and doubled <code>*.ts.ts</code> suffixes</td>
+            <td><code>controllers/</code> · <code>test-utils/</code></td>
+            <td>open</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted">Full evidence / remediation / prevention per issue: <code>reports/findings.json</code>. Security subset: <code>reports/security.html</code>.</p>
+    </section>
+
+    <section class="section">
+      <h2>Proposed refactor plan</h2>
+      <p>Protected — do not change: <code>notifications.port.ts</code>, <code>notification.service.ts</code>.</p>
+      <ol>
+        <li><strong>P0:</strong> ISSUE-001 (404 missing order) → ISSUE-002 (transaction + safe decrement).</li>
+        <li><strong>P1 tests first (TDD):</strong> ISSUE-010, ISSUE-011 — lock cahier expectations (may go red on current seasonal/expirable behavior).</li>
+        <li><strong>P1 structure + behavior:</strong> ISSUE-014 move sell/notify into <code>ProductService</code>; fix ISSUE-003/004/005/009; column updates ISSUE-008; unknown type ISSUE-006; idempotency ISSUE-007.</li>
+        <li><strong>P1 security/deps (Gate 1 choice):</strong> ISSUE-012 auth vs loopback defer; ISSUE-013 targeted upgrades + drop unused lodash.</li>
+        <li><strong>P2:</strong> ISSUE-015 FKs/invariants · ISSUE-016 typecheck+CI · ISSUE-017/018 logging &amp; shell · ISSUE-019 unused deps.</li>
+        <li><strong>P3:</strong> ISSUE-020 lint cleanup · ISSUE-021 renames after tests protect behavior.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Proposed test strategy (TDD)</h2>
+      <p><strong>Unit (ProductService + mocked notifications)</strong> — cahier matrix:</p>
+      <ul>
+        <li>NORMAL: in stock → decrement; OOS leadTime 15 / 0 → delay notify</li>
+        <li>SEASONAL: in season + stock; in season OOS short/long lead; before start; after end</li>
+        <li>EXPIRABLE: before expiry ± stock; after expiry → expiration (not delay)</li>
+        <li>Null dates / unknown type → domain error, no stock change</li>
+      </ul>
+      <p><strong>Integration (supertest)</strong> — HTTP + DB: 404 unknown order; six-product fixture asserts stock + notifications; double process idempotent; mid-order failure rolls back; invalid orderId → 400.</p>
+      <p>No Playwright / product UI. Commits only if you ask.</p>
+    </section>
+
+    <section class="section">
+      <h2>Tooling gaps</h2>
+      <ul>
+        <li>Missing <code>typecheck</code> / <code>audit</code> scripts and GitHub Actions</li>
+        <li>Vitest HTML reporter directory overlaps <code>tsc</code> include</li>
+        <li>Lint already red; coverage package unused in default scripts</li>
+        <li>Test helpers use shell <code>exec</code> and <code>*.ts.ts</code> names</li>
+        <li>A11y N/A (API only) — do not restyle product UI</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Gate 1 decisions</h2>
+      <p>For a Merjane kata focused on regression-safe SOLID refactor, suggest <strong>approve all</strong> except optionally:</p>
+      <ul>
+        <li><strong>Defer ISSUE-012</strong> (full auth) → bind loopback / document risk only</li>
+        <li><strong>Defer ISSUE-013</strong> broad audit chase → upgrade direct runtime + remove unused lodash only</li>
+        <li><strong>Defer ISSUE-007</strong> if schema migration for <code>processed</code> is out of exercise scope (call out explicitly)</li>
+      </ul>
+    </section>
+  </article>
+</body>
+</html>
