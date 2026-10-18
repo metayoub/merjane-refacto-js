@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}} — Coverage</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>{{TITLE}} — Coverage</h1>
+      <div class="report-meta">
+        <span>Generated <strong>{{GENERATED_AT}}</strong></span>
+        <span>Developer model <strong>{{DEVELOPER_MODEL}}</strong></span>
+        <span>Reviewer model <strong>{{REVIEWER_MODEL}}</strong></span>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Summary</h2>
+      <p class="placeholder">{{COVERAGE_SUMMARY}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Commands</h2>
+      <p class="muted">How to regenerate coverage locally:</p>
+      <p class="placeholder">{{COVERAGE_COMMANDS}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Issue → regression test map</h2>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Test file</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3" class="placeholder">{{ISSUE_TEST_ROWS}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </article>
+</body>
+</html>

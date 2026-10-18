@@ -1,0 +1,35 @@
+---
+description: Enforce Evreghen design system when creating or editing HTML or PDF documents
+globs: "**/*.html, **/*.htm, **/*.pdf"
+alwaysApply: false
+---
+
+# Document Design System
+
+When creating or editing **HTML** or **PDF** documents in this project, follow `@design.md` (Evreghen Command Center).
+
+## Required
+
+1. **Read** `@design.md` before designing or generating any HTML/PDF output.
+2. Use the design tokens from that file — do not invent a parallel palette or type system.
+3. Visual identity:
+   - Warm off-white workspace (`#fcfaf7`), brown-gray text (`#423d38`), muted secondary (`#797067`)
+   - Orange primary for action/emphasis (`#fe6e00` / `#ff6b00`)
+   - Dark frosted shell only as framing chrome when a shell layout is appropriate
+   - System sans: `ui-sans-serif, system-ui, sans-serif` (monospace only for code)
+4. Spacing, radii, shadows, and component patterns must match `@design.md` (4px rhythm, card radius 12px, soft controls 6–8px, restrained shadows).
+5. Respect Do's and Don'ts in `@design.md` (no cool pure-white enterprise look, no extra brand colors, no decorative/editorial fonts, no full-page dark dashboard by default).
+
+## HTML
+
+- Prefer CSS custom properties mapped from `@design.md` tokens.
+- Keep analytical surfaces quiet; let orange carry CTAs, focus, and telemetry accents.
+
+## PDF
+
+- Same color, type, and spacing language as HTML.
+- Print-safe: sufficient contrast, no reliance on shell blur/transparency for critical content.
+
+## Out of scope
+
+This rule does **not** force the design system onto arbitrary application source code unless that code is itself an HTML/PDF document deliverable.

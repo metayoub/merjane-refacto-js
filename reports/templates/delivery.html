@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}} — Delivery</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>{{TITLE}} — Delivery</h1>
+      <div class="report-meta">
+        <span>Generated <strong>{{GENERATED_AT}}</strong></span>
+        <span>Developer model <strong>{{DEVELOPER_MODEL}}</strong></span>
+        <span>Reviewer model <strong>{{REVIEWER_MODEL}}</strong></span>
+      </div>
+    </header>
+
+    <div class="gate-banner">
+      <strong>Gate 2 — Human approval required.</strong>
+      Sign off on this delivery narrative, or request corrections / residual fixes.
+    </div>
+
+    <section class="section">
+      <h2>What we did</h2>
+      <p class="placeholder">{{WHAT_WE_DID}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Why (mapped to issue IDs)</h2>
+      <p class="placeholder">{{WHY_MAP}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Deferred</h2>
+      <p class="placeholder">{{DEFERRED}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Per-issue: fix + how to avoid</h2>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>What was done</th>
+            <th>How to avoid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3" class="placeholder">{{DELIVERY_ROWS}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Links</h2>
+      <ul>
+        <li><a href="findings.html">findings.html</a></li>
+        <li><a href="security.html">security.html</a></li>
+        <li><a href="coverage.html">coverage.html</a></li>
+      </ul>
+      <p class="placeholder">{{TEST_COMMANDS}}</p>
+    </section>
+  </article>
+</body>
+</html>

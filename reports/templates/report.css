@@ -1,0 +1,222 @@
+/* Evreghen Command Center tokens — from design.md (report documents only) */
+:root {
+  --color-background: #fcfaf7;
+  --color-on-background: #423d38;
+  --color-surface: #f3f4f6;
+  --color-surface-soft: #edebe9;
+  --color-surface-elevated: #ffffff;
+  --color-on-surface: #423d38;
+  --color-on-surface-muted: #797067;
+  --color-outline: #e3e0dd;
+  --color-outline-strong: #d1d5dc;
+  --color-primary: #fe6e00;
+  --color-primary-strong: #ff6b00;
+  --color-primary-warm: #ffb74d;
+  --color-primary-focus: #f97015;
+  --color-on-primary: #ffffff;
+  --color-success: #00c758;
+  --color-warning: #edb200;
+  --color-danger: #fb2c36;
+  --color-info: #3080ff;
+  --badge-p0-bg: #fee2e2;
+  --badge-p0-fg: #991b1b;
+  --badge-p1-bg: #ffedd5;
+  --badge-p1-fg: #9a3412;
+  --badge-p2-bg: #f3f4f6;
+  --badge-p2-fg: #364153;
+  --badge-p3-bg: #f3f4f6;
+  --badge-p3-fg: #797067;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --container-max: 1400px;
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-on-background);
+  background: var(--color-background);
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  padding: var(--space-2xl);
+}
+
+.report {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.report-header {
+  border-bottom: 1px solid var(--color-outline);
+  padding-bottom: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.report-brand {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.report-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2rem;
+  margin: 0 0 var(--space-md);
+  color: var(--color-on-background);
+}
+
+.report-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  font-size: 0.875rem;
+  color: var(--color-on-surface-muted);
+}
+
+.report-meta strong {
+  color: var(--color-on-surface);
+  font-weight: 600;
+}
+
+.section {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  box-shadow: var(--shadow-subtle);
+}
+
+.section h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 var(--space-lg);
+  color: var(--color-on-background);
+}
+
+.section p,
+.section li {
+  font-size: 0.875rem;
+  color: var(--color-on-surface-muted);
+}
+
+.gate-banner {
+  background: rgba(254, 110, 0, 0.08);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  font-size: 0.875rem;
+  color: var(--color-on-background);
+}
+
+.gate-banner strong {
+  color: var(--color-primary-strong);
+}
+
+table.issues {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+table.issues th {
+  text-align: left;
+  background: rgba(254, 110, 0, 0.05);
+  color: var(--color-primary-strong);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  height: 48px;
+  padding: 0 var(--space-lg);
+  border-bottom: 1px solid var(--color-outline);
+}
+
+table.issues td {
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--color-outline);
+  color: var(--color-on-surface-muted);
+  vertical-align: top;
+}
+
+table.issues td code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-on-surface);
+}
+
+.badge {
+  display: inline-block;
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-p0 {
+  background: var(--badge-p0-bg);
+  color: var(--badge-p0-fg);
+}
+
+.badge-p1 {
+  background: var(--badge-p1-bg);
+  color: var(--badge-p1-fg);
+}
+
+.badge-p2 {
+  background: var(--badge-p2-bg);
+  color: var(--badge-p2-fg);
+}
+
+.badge-p3 {
+  background: var(--badge-p3-bg);
+  color: var(--badge-p3-fg);
+}
+
+.badge-security {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.muted {
+  color: var(--color-on-surface-muted);
+}
+
+.placeholder {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-primary);
+}
+
+a {
+  color: var(--color-primary-focus, #f97015);
+}
+
+a:hover {
+  color: var(--color-primary-strong);
+}

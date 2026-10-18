@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}} — Findings</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>{{TITLE}}</h1>
+      <div class="report-meta">
+        <span>Generated <strong>{{GENERATED_AT}}</strong></span>
+        <span>Developer model <strong>{{DEVELOPER_MODEL}}</strong></span>
+        <span>Reviewer model <strong>{{REVIEWER_MODEL}}</strong></span>
+      </div>
+    </header>
+
+    <div class="gate-banner">
+      <strong>Gate 1 — Human approval required.</strong>
+      Do not edit product source until the human approves (or adjusts) this catalog and the proposed plan below.
+    </div>
+
+    <section class="section">
+      <h2>Baseline (as-found)</h2>
+      <p class="placeholder">{{BASELINE_NOTES}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Issue catalog</h2>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sev</th>
+            <th>Category</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--
+          <tr>
+            <td><code>ISSUE-001</code></td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td>security</td>
+            <td>Example title</td>
+            <td><code>path/to/file.ts:12</code></td>
+            <td>open</td>
+          </tr>
+          -->
+          <tr>
+            <td colspan="6" class="placeholder">{{ISSUES_ROWS}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Proposed refactor plan</h2>
+      <p class="placeholder">{{REFACTOR_PLAN}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Proposed test strategy (TDD)</h2>
+      <p class="placeholder">{{TEST_STRATEGY}}</p>
+    </section>
+
+    <section class="section">
+      <h2>Tooling gaps</h2>
+      <p class="placeholder">{{TOOLING_GAPS}}</p>
+    </section>
+  </article>
+</body>
+</html>

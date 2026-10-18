@@ -1,0 +1,21 @@
+---
+description: Guided review-loop for JS/TS — trigger word review-loop; gates, model separation, no UI redesign
+alwaysApply: true
+---
+
+# Review Loop
+
+When the human says **`review-loop`** (or `run review-loop` / `start review-loop`), open and follow:
+
+`docs/superpowers/playbooks/review-loop.md`
+
+Spec: `docs/superpowers/specs/2026-10-16-guided-review-refactor-loop-design.md`
+
+## Hard rules
+
+1. **Gate 1 — HARD STOP: No product source edits until the human explicitly approves Gate 1** (exact phrase like `approve Gate 1` or `Gate 1 approved`). Clarifying answers alone are not approval. Installing deps / reading files / writing `reports/*` is allowed before Gate 1; editing application source under `src/`, `app/`, `lib/`, or equivalent is not.
+2. **Gate 2 — HARD STOP: delivery is not final until the human explicitly approves Gate 2.**
+3. **Review LLM ≠ Development LLM** — ask for the review model if unset; never same-model self-review.
+4. **No product UI redesign** — `@design.md` styles **HTML reports** only.
+5. After Gate 1, fix only issues with `status: approved` using **TDD** (failing regression test first).
+6. Write filled reports under `reports/` (templates stay in `reports/templates/`; CSS href is `templates/report.css`).

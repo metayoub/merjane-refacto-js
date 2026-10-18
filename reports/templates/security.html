@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}} — Security</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>{{TITLE}} — Security</h1>
+      <div class="report-meta">
+        <span>Generated <strong>{{GENERATED_AT}}</strong></span>
+        <span>Developer model <strong>{{DEVELOPER_MODEL}}</strong></span>
+        <span>Reviewer model <strong>{{REVIEWER_MODEL}}</strong></span>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Security findings</h2>
+      <p class="muted">Subset of issues with <code>security: true</code>. Reviewed on the Reviewer model (must differ from Developer).</p>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sev</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Evidence</th>
+            <th>Remediation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6" class="placeholder">{{SECURITY_ROWS}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Dependency / audit notes</h2>
+      <p class="placeholder">{{AUDIT_NOTES}}</p>
+    </section>
+  </article>
+</body>
+</html>

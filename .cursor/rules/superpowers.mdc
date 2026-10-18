@@ -1,0 +1,16 @@
+---
+description: Require Superpowers skill workflows for all work in this repo
+alwaysApply: true
+---
+
+# Superpowers Required
+
+This repository uses Superpowers. Skills are mandatory process, not suggestions.
+
+- Before any non-trivial action, check whether a Superpowers skill applies. If there is even a small chance it does, read that skill and follow it.
+- Creative / feature / planning work → use `brainstorming` first; do not jump to code.
+- Bugs and mysterious failures → use `systematic-debugging` before proposing fixes.
+- After an approved design with multiple tasks → use `writing-plans`, then execute via the plan skills.
+- Before claiming work is complete or fixed → use `verification-before-completion`.
+- Announce: "Using [skill] to [purpose]", then follow the skill checklist exactly.
+- Project instructions in `AGENTS.md` and other `.cursor/rules/` take precedence over skill defaults when they conflict.

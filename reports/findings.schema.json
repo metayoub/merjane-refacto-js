@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://theodo.local/schemas/findings.json",
+  "title": "Review-loop findings",
+  "description": "Machine-readable issue catalog for the guided review-loop playbook.",
+  "type": "object",
+  "required": ["generatedAt", "developerModel", "reviewerModel", "issues"],
+  "additionalProperties": false,
+  "properties": {
+    "generatedAt": {
+      "type": "string",
+      "description": "ISO-8601 timestamp when the catalog was generated."
+    },
+    "developerModel": {
+      "type": "string",
+      "description": "LLM used for development / refactor / test authoring."
+    },
+    "reviewerModel": {
+      "type": "string",
+      "description": "LLM used for review passes (must differ from developerModel)."
+    },
+    "baseline": {
+      "type": "object",
+      "description": "As-found tooling snapshot.",
+      "additionalProperties": true
+    },
+    "issues": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/issue" }
+    }
+  },
+  "definitions": {
+    "issue": {
+      "type": "object",
+      "required": ["id", "severity", "category", "title", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ISSUE-\\d{3,}$",
+          "description": "Stable issue identifier, e.g. ISSUE-001."
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["P0", "P1", "P2", "P3"]
+        },
+        "category": {
+          "type": "string",
+          "description": "e.g. security, bug, solid, lint, a11y, tooling, deps."
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "approved", "fixed", "deferred", "rejected"]
+        },
+        "location": {
+          "type": "string",
+          "description": "File path and optional line range."
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "remediation": {
+          "type": "string"
+        },
+        "prevention": {
+          "type": "string"
+        },
+        "solidAngle": {
+          "type": "string",
+          "description": "Which SOLID principle guides the fix, if any."
+        },
+        "security": {
+          "type": "boolean",
+          "description": "True when this finding is security-relevant."
+        }
+      }
+    }
+  }
+}
