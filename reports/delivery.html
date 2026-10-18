@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merjane Refacto — Delivery</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>Merjane Refacto — Delivery</h1>
+      <div class="report-meta">
+        <span>Generated <strong>2026-10-18T11:00:00.000Z</strong></span>
+        <span>Developer model <strong>Claude Opus 4.8</strong></span>
+        <span>Reviewer model <strong>Grok 4.7</strong></span>
+      </div>
+    </header>
+
+    <div class="gate-banner">
+      <strong>Gate 2 — Human approval required.</strong>
+      Sign off on this delivery narrative, or request corrections / residual fixes.
+      Reply with <code>approve Gate 2</code>.
+    </div>
+
+    <section class="section">
+      <h2>What we did</h2>
+      <ol>
+        <li>Locked NORMAL / SEASONAL / EXPIRABLE with integration characterization tests (TDD; 3 cahier gaps went RED then GREEN).</li>
+        <li>Introduced <code>Product</code> domain object, <code>ProductRepository</code> / <code>OrderRepository</code>, and per-type handlers.</li>
+        <li>Slimmed the controller to HTTP + transaction; <code>ProductService.process</code> dispatches to handlers.</li>
+        <li>Earlier Gate 1: 404/400, atomic rollback, deps upgrade + CI audit.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Why (mapped to issue IDs)</h2>
+      <ul>
+        <li><strong>001–002 / 013</strong> — Gate 1 approved integrity + supply-chain hygiene</li>
+        <li><strong>003–005 / 011</strong> — Cahier fidelity + missing business assertions</li>
+        <li><strong>010 / 014</strong> — Honest tests + SRP / layer separation (handlers + repositories)</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Deferred</h2>
+      <p>Still deferred from Gate 1: auth (012), broad audit chase beyond Fastify v4 (013 residual), idempotent re-process (007), FK pragma (015), typecheck script polish (016), console/shell leftovers if any (017–018), unused deps cleanup beyond lodash (019), rename nits (020–021).</p>
+    </section>
+
+    <section class="section">
+      <h2>Per-issue: fix + how to avoid</h2>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>What was done</th>
+            <th>How to avoid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>001</code></td>
+            <td>404 missing order; positive int Zod</td>
+            <td>Never force-unwrap DB lookups; validate route params</td>
+          </tr>
+          <tr>
+            <td><code>002</code></td>
+            <td>BEGIN/COMMIT/ROLLBACK around process</td>
+            <td>One transaction per order; conditional stock updates</td>
+          </tr>
+          <tr>
+            <td><code>003</code></td>
+            <td>EXPIRABLE OOS → delay, not expiration</td>
+            <td>Branch expiry before stock; handler owns policy</td>
+          </tr>
+          <tr>
+            <td><code>004</code></td>
+            <td>Seasonal matrix; no wipe after/before season</td>
+            <td>Season checks before leadTime wipe; unit matrix</td>
+          </tr>
+          <tr>
+            <td><code>005</code></td>
+            <td>NORMAL delay even when leadTime = 0</td>
+            <td>Always notify on OOS; leadTime is the delay value</td>
+          </tr>
+          <tr>
+            <td><code>010–011</code></td>
+            <td>Fixed tautology WHERE; rich integration asserts</td>
+            <td>Assert stock + notifications; filter by real id</td>
+          </tr>
+          <tr>
+            <td><code>013</code></td>
+            <td>Upgrade runtime deps; drop lodash; CI audit</td>
+            <td>Keep <code>audit --prod</code> in CI; plan Fastify v5 later</td>
+          </tr>
+          <tr>
+            <td><code>014</code></td>
+            <td>Handlers + repositories + thin controller</td>
+            <td>New product types = new handler, not switch in HTTP layer</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Architecture (readable layout)</h2>
+      <pre><code>src/domain/product.ts              ← Product object
+src/repositories/*.ts              ← persistence
+src/services/product-handlers/     ← NORMAL | SEASONAL | EXPIRABLE
+src/services/impl/product.service.ts ← dispatch
+src/controllers/my-controller.ts   ← HTTP + transaction only</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Links</h2>
+      <ul>
+        <li><a href="findings.html">findings.html</a></li>
+        <li><a href="security.html">security.html</a></li>
+        <li><a href="coverage.html">coverage.html</a></li>
+      </ul>
+      <p>Verify: <code>pnpm test</code></p>
+    </section>
+  </article>
+</body>
+</html>

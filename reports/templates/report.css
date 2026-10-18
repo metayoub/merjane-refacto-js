@@ -203,6 +203,21 @@ table.issues td code {
   color: #991b1b;
 }
 
+.badge-fixed {
+  background: #dcfce7;
+  color: #016630;
+}
+
+.badge-deferred {
+  background: #f3f4f6;
+  color: #364153;
+}
+
+.badge-open {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
 .muted {
   color: var(--color-on-surface-muted);
 }

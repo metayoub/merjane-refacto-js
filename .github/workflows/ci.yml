@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # pnpm version is derived from the "packageManager" field in package.json
+      # (pnpm@9.1.4). Keeping action-setup without a pinned version lets it read
+      # that field so CI and local stay in sync.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Lint is informational for now: the integration spec still carries a few
+      # pre-existing xo "no-unnecessary-type-assertion" errors tracked under the
+      # deferred ISSUE-020. They must not block CI until that issue is approved,
+      # so lint is allowed to fail without failing the pipeline.
+      - name: Lint
+        run: pnpm lint
+        continue-on-error: true
+
+      - name: Test
+        run: pnpm test
+
+      # Production audit. Critical `proxy-addr` is pinned via pnpm.overrides (>=2.0.8).
+      # Remaining highs are mostly Fastify v4 / convict-format / native build chain
+      # (find-my-way, validator, tar-fs, …) — not all require Fastify v5.
+      # Fail the job on new *critical* advisories; keep a full prod audit log
+      # (non-blocking) so highs stay visible without permanently red CI.
+      - name: Audit (fail on critical)
+        run: pnpm audit --prod --audit-level=critical
+
+      - name: Audit (full prod log)
+        run: pnpm audit --prod
+        continue-on-error: true

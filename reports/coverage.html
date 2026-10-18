@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merjane Refacto — Coverage</title>
+  <link rel="stylesheet" href="templates/report.css" />
+</head>
+<body>
+  <article class="report">
+    <header class="report-header">
+      <p class="report-brand">Evreghen · Review Loop</p>
+      <h1>Merjane Refacto — Coverage</h1>
+      <div class="report-meta">
+        <span>Generated <strong>2026-10-18T11:00:00.000Z</strong></span>
+        <span>Developer model <strong>Claude Opus 4.8</strong></span>
+        <span>Reviewer model <strong>Grok 4.7</strong></span>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Summary</h2>
+      <p><code>pnpm test</code>: <strong>16 unit + 16 integration = 32 passed</strong>.</p>
+      <ul>
+        <li>Unit: Product domain, NORMAL/SEASONAL/EXPIRABLE handlers, ProductService</li>
+        <li>Integration: HTTP integrity + per-type cahier scenarios</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Commands</h2>
+      <pre><code>pnpm test
+pnpm test:unit --run
+pnpm test:integration --run</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Issue → regression test map</h2>
+      <table class="issues">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Test file</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ISSUE-001</code></td>
+            <td><code>my-controller.integration.spec.ts</code> (404 / 400)</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-002</code></td>
+            <td><code>my-controller.integration.spec.ts</code> (rollback)</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-003</code> / <code>005</code></td>
+            <td>EXPIRABLE OOS delay · NORMAL leadTime 0</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-004</code></td>
+            <td>SEASONAL matrix (incl. after-season stock preserved)</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-010</code></td>
+            <td><code>product.service.spec.ts</code> (eq by id)</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-011</code></td>
+            <td>Per-type integration characterizes stock + notifications</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-013</code></td>
+            <td>CI + <code>pnpm audit --prod</code> (tooling)</td>
+            <td>pass</td>
+          </tr>
+          <tr>
+            <td><code>ISSUE-014</code></td>
+            <td>Handler unit specs + thin controller</td>
+            <td>pass</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </article>
+</body>
+</html>

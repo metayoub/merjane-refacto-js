@@ -1,48 +1,38 @@
 import {type Cradle} from '@fastify/awilix';
-import {eq} from 'drizzle-orm';
 import {type INotificationService} from '../notifications.port.js';
-import {products, type Product} from '@/db/schema.js';
-import {type Database} from '@/db/type.js';
+import {createProductHandlers, type ProductHandler} from '../product-handlers/index.js';
+import {type Product as ProductRow} from '@/db/schema.js';
+import {Product, type ProductType} from '@/domain/product.js';
+import {ProductRepository} from '@/repositories/product.repository.js';
 
+/** Dispatches each product line to the NORMAL / SEASONAL / EXPIRABLE handler. */
 export class ProductService {
-	private readonly ns: INotificationService;
-	private readonly db: Database;
+	private readonly notifications: INotificationService;
+	private readonly products: ProductRepository;
+	private readonly handlers: Record<ProductType, ProductHandler>;
 
 	public constructor({ns, db}: Pick<Cradle, 'ns' | 'db'>) {
-		this.ns = ns;
-		this.db = db;
+		this.notifications = ns;
+		this.products = new ProductRepository(db);
+		this.handlers = createProductHandlers();
 	}
 
-	public async notifyDelay(leadTime: number, p: Product): Promise<void> {
-		p.leadTime = leadTime;
-		await this.db.update(products).set(p).where(eq(products.id, p.id));
-		this.ns.sendDelayNotification(leadTime, p.name);
-	}
-
-	public async handleSeasonalProduct(p: Product): Promise<void> {
-		const currentDate = new Date();
-		const d = 1000 * 60 * 60 * 24;
-		if (new Date(currentDate.getTime() + (p.leadTime * d)) > p.seasonEndDate!) {
-			this.ns.sendOutOfStockNotification(p.name);
-			p.available = 0;
-			await this.db.update(products).set(p).where(eq(products.id, p.id));
-		} else if (p.seasonStartDate! > currentDate) {
-			this.ns.sendOutOfStockNotification(p.name);
-			await this.db.update(products).set(p).where(eq(products.id, p.id));
-		} else {
-			await this.notifyDelay(p.leadTime, p);
+	public async process(product: Product): Promise<void> {
+		const handler = this.handlers[product.type];
+		if (!handler) {
+			throw new Error(`Unsupported product type: ${String(product.type)}`);
 		}
+
+		await handler.process(product, {
+			notifications: this.notifications,
+			products: this.products,
+		});
 	}
 
-	public async handleExpiredProduct(p: Product): Promise<void> {
-		const currentDate = new Date();
-		if (p.available > 0 && p.expiryDate! > currentDate) {
-			p.available -= 1;
-			await this.db.update(products).set(p).where(eq(products.id, p.id));
-		} else {
-			this.ns.sendExpirationNotification(p.name, p.expiryDate!);
-			p.available = 0;
-			await this.db.update(products).set(p).where(eq(products.id, p.id));
-		}
+	/** Kept for legacy unit coverage of delay persistence; prefer process(). */
+	public async notifyDelay(leadTime: number, row: ProductRow): Promise<void> {
+		const product = Product.fromRow({...row, leadTime});
+		await this.products.updateLeadTime(product.id, leadTime);
+		this.notifications.sendDelayNotification(leadTime, product.name);
 	}
 }

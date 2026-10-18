@@ -9,7 +9,8 @@
     "test:unit": "vitest -c vitest.unit.config.ts",
     "test:integration": "cross-env CONFIG_PATH=\".env.test\" vitest -c vitest.integration.config.ts",
     "drizzle:push": "cross-env CONFIG_PATH=\".env.dev\" drizzle-kit push --config src/db/drizzle.config.ts",
-    "lint": "xo"
+    "lint": "xo",
+    "audit": "pnpm audit --prod"
   },
   "type": "module",
   "keywords": [],
@@ -20,21 +21,19 @@
     "@fastify/error": "^3.4.1",
     "@fastify/under-pressure": "^8.3.0",
     "@types/better-sqlite3": "^7.6.10",
-    "@types/lodash": "^4.17.4",
     "@types/object-hash": "^3.0.6",
     "app-root-path": "^3.1.0",
     "awilix": "^8.0.1",
     "better-sqlite3": "^12.6.2",
-    "convict": "^6.2.4",
+    "convict": "^6.2.5",
     "convict-format-with-validator": "^6.2.0",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.31.1",
+    "drizzle-orm": "^0.45.4",
     "fast-glob": "^3.3.2",
-    "fastify": "4.25.2",
+    "fastify": "4.29.1",
     "fastify-plugin": "^4.5.1",
     "fastify-type-provider-zod": "^1.2.0",
-    "lodash": "^4.17.21",
     "object-hash": "^3.0.0",
     "pino": "^8.21.0",
     "pino-pretty": "^10.3.1",
@@ -51,7 +50,7 @@
     "@vitest/coverage-v8": "1.6.0",
     "@vitest/ui": "1.6.0",
     "cross-env": "^7.0.3",
-    "drizzle-kit": "^0.22.2",
+    "drizzle-kit": "^0.31.11",
     "esbuild": "^0.17.19",
     "esbuild-node-tsc": "^2.0.5",
     "esbuild-register": "^3.5.0",
@@ -67,6 +66,11 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "pnpm": {
+    "overrides": {
+      "proxy-addr": ">=2.0.8"
+    }
   },
   "packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9"
 }

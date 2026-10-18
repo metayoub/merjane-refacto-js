@@ -31,7 +31,7 @@
       "severity": "P0",
       "category": "bug",
       "title": "Missing order crashes processOrder with a 500",
-      "status": "approved",
+      "status": "fixed",
       "location": "src/controllers/my-controller.ts:24-38",
       "evidence": "findFirst is force-unwrapped with `!`. A missing id yields undefined; destructuring throws TypeError → HTTP 500. z.coerce.number() also accepts negatives/non-integers.",
       "remediation": "Return 404 when the order is absent. Constrain orderId to a positive integer in the Zod params schema.",
@@ -44,7 +44,7 @@
       "severity": "P0",
       "category": "bug",
       "title": "Multi-product stock updates are non-atomic and lose increments under concurrency",
-      "status": "approved",
+      "status": "fixed",
       "location": "src/controllers/my-controller.ts:40-81; src/services/impl/product.service.ts:16-46",
       "evidence": "Read-modify-write of absolute available with no transaction around the product loop. Concurrent processOrder can oversell; a mid-loop throw leaves earlier lines committed.",
       "remediation": "One DB transaction per processOrder. Prefer conditional decrement (affected-row count). Roll back the whole order on any line failure.",
@@ -57,7 +57,7 @@
       "severity": "P1",
       "category": "bug",
       "title": "Expirable out-of-stock products are treated as expired",
-      "status": "deferred",
+      "status": "fixed",
       "location": "src/controllers/my-controller.ts:69-76; src/services/impl/product.service.ts:37-46",
       "evidence": "Controller calls handleExpiredProduct whenever sellable check fails. Service else-branch always sends expiration notification and zeros stock — including available=0 with future expiryDate. Cahier: expiration notification after expiry; OOS while unexpired should follow delay rule.",
       "remediation": "Branch on expiry first in one place: expired → expiration notify + unavailable; unexpired in stock → decrement; unexpired OOS → notifyDelay. Remove duplicated predicate.",
@@ -70,7 +70,7 @@
       "severity": "P1",
       "category": "bug",
       "title": "Seasonal rules disagree with the cahier and can wipe on-hand stock",
-      "status": "deferred",
+      "status": "fixed",
       "location": "src/controllers/my-controller.ts:57-64; src/services/impl/product.service.ts:22-34",
       "evidence": "Before season / after season, handleSeasonalProduct can take leadTime-vs-seasonEnd first and set available=0, discarding stock. Cahier: before season → unavailable notify; delay-vs-season-end when OOS during season.",
       "remediation": "Centralize seasonal policy in ProductService: sell in season with stock; before start → out-of-stock notify, leave available; in-season OOS → delay or out-of-stock by leadTime vs season end; after end → unavailable without wiping on-hand unless explicitly approved.",
@@ -83,7 +83,7 @@
       "severity": "P1",
       "category": "bug",
       "title": "Normal out-of-stock with leadTime <= 0 notifies nobody",
-      "status": "deferred",
+      "status": "fixed",
       "location": "src/controllers/my-controller.ts:43-52",
       "evidence": "Delay notification only if leadTime > 0. leadTime 0 skips client announcement while still returning 200.",
       "remediation": "Always call notifyDelay on NORMAL OOS; treat negative leadTime as a domain error.",
@@ -148,7 +148,7 @@
       "severity": "P1",
       "category": "test",
       "title": "Unit test WHERE clause always matches the first product row",
-      "status": "deferred",
+      "status": "fixed",
       "location": "src/services/impl/product.service.spec.ts:54-56",
       "evidence": "`eq(product.id, product.id)` shadows the fixture; predicate always true. Green with a single row but does not prove correct id persistence.",
       "remediation": "Filter by inserted id via schema column; assert that row's fields.",
@@ -161,7 +161,7 @@
       "severity": "P1",
       "category": "test",
       "title": "Integration test never checks stock or notifications",
-      "status": "deferred",
+      "status": "fixed",
       "location": "src/controllers/my-controller.integration.spec.ts:39-77",
       "evidence": "Six-product cahier fixture exists but test only asserts HTTP 200 and order id presence. Passes even if stock logic is removed.",
       "remediation": "Assert each product's available and exact notification calls after processOrder.",
@@ -187,7 +187,7 @@
       "severity": "P1",
       "category": "deps",
       "title": "pnpm audit reports critical and high advisories",
-      "status": "approved",
+      "status": "fixed",
       "location": "package.json:18-66",
       "evidence": "pnpm audit: ~8 critical / ~56 high among 119. Runtime notables: convict, pinned fastify 4.25.2, drizzle-orm; unused lodash; vitest UI/API critical when exposed.",
       "remediation": "Upgrade direct runtime packages (fastify, convict, drizzle-orm); remove unused lodash; do not expose vitest --ui; re-audit.",
@@ -200,7 +200,7 @@
       "severity": "P2",
       "category": "solid",
       "title": "Sell rules live in the controller and are duplicated in ProductService",
-      "status": "deferred",
+      "status": "fixed",
       "location": "src/controllers/my-controller.ts:40-81; src/services/impl/product.service.ts:16-47",
       "evidence": "Controller owns NORMAL/SEASONAL/EXPIRABLE decisions, decrements, and SQL. Service only sees failure branches but also duplicates sell/season logic (drives ISSUE-003/004).",
       "remediation": "Controller loads order + maps HTTP; ProductService owns availability/notifications/persistence. Keep INotificationService unchanged (WARN).",
@@ -328,5 +328,20 @@
       "ISSUE-021"
     ],
     "note": "Human: approve Gate 1 — approve ISSUE-001, ISSUE-002, ISSUE-013; defer all other issues"
+  },
+  "gate2ReadyAt": "2026-10-18T10:54:51.730Z",
+  "scopeExpansion": {
+    "at": "2026-10-18T10:59:56.629Z",
+    "note": "Human requested cahier characterization tests + Product/repository/handlers SOLID refactor (TDD)."
+  },
+  "postFixReview": {
+    "reviewer": "Grok 4.7",
+    "verdict": "REQUEST_CHANGES",
+    "addressedAt": "2026-10-18T11:07:18.859Z",
+    "notes": [
+      "ISSUE-002: handlers now honor decrementStock() false → OOS/delay policy (unit tests).",
+      "ISSUE-013: pnpm.overrides proxy-addr>=2.0.8; CI fails on critical audit; highs still logged non-blocking.",
+      "Scope expansion ISSUE-003/004/005/010/011/014: kept — human later approved cahier TDD + SOLID refactor (not Gate-1-only)."
+    ]
   }
 }
